@@ -15,8 +15,8 @@ namespace POC_GeracaoImagens
         protected void Page_Load(object sender, EventArgs e)
         {
             ImageGeneratorHelper imgHelper = new ImageGeneratorHelper();
-            string img = imgHelper.ConvertTextToImage("tentando melhorar a imagem 350 largura",
-                "Bookman Old Style", 12, Color.Red, Color.White, 350, 350);
+            string img = imgHelper.ConvertTextToImage("Parabéns à irmã que sempre adiciona amor e luz à minha vida. Que este dia seja tão maravilhoso quanto você é!",
+                "Open Sans", 12, FontStyle.Bold, Color.Red, Color.White, 350, 350);
 
             imgTeste.ImageUrl = img;
         }

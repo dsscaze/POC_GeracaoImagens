@@ -12,25 +12,9 @@ namespace POC_GeracaoImagens
 {
     public class ImageGeneratorHelper
     {
-        public string ConvertTextToImage(string text, string fontname, int fontsize, Color bgcolor, Color fcolor, int Width, int Height)
+        public string ConvertTextToImage(string text, string fontname, int fontsize, FontStyle fontStyle, Color bgcolor, Color fcolor, int Width, int Height)
         {
-
-            //Bitmap bmp = new Bitmap(width, Height);
-            //using (Graphics graphics = Graphics.FromImage(bmp))
-            //{
-
-            //    Font font = new Font(fontname, fontsize);
-            //    graphics.FillRectangle(new SolidBrush(bgcolor), 0, 0, bmp.Width, bmp.Height);
-            //    graphics.DrawString(txt, font, new SolidBrush(fcolor), 0, 0);
-            //    graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            //    graphics.TextRenderingHint = TextRenderingHint.AntiAlias;
-            //    graphics.Flush();
-            //    font.Dispose();
-            //    graphics.Dispose();
-
-            //}
-
-            Font font = new Font(fontname, fontsize);
+            Font font = new Font(fontname, fontsize, fontStyle);
 
             //first, create a dummy bitmap just to get a graphics object
             Image img = new Bitmap(1, 1);
@@ -43,6 +27,8 @@ namespace POC_GeracaoImagens
             //uncomment the next line for right to left languages
             //sf.FormatFlags = StringFormatFlags.DirectionRightToLeft;
             sf.Trimming = StringTrimming.Word;
+            sf.Alignment = StringAlignment.Center;
+
             //free up the dummy image and old graphics object
             img.Dispose();
             drawing.Dispose();
@@ -64,7 +50,7 @@ namespace POC_GeracaoImagens
             //create a brush for the text
             Brush textBrush = new SolidBrush(fcolor);
 
-            drawing.DrawString(text, font, textBrush, new RectangleF(0, 0, Width, Height), sf);
+            drawing.DrawString(text, font, textBrush, new RectangleF(0, Width * 0.40f, Width, Height), sf);
 
             drawing.Save();
 
