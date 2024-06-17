@@ -10,6 +10,41 @@ using System.Web;
 
 namespace POC_GeracaoImagens
 {
+
+    public class ImageWriter
+    {
+        public void WriteTextToImage(Bitmap image, string savePath, string textToWrite, FontFamily fontFamily)
+        {
+            using (var graphics = Graphics.FromImage(image))
+            {
+                graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                // Image is 444 x 248 pixels, this should place text center
+                PointF writeLocation = new PointF(222f, 124f);
+                var format = new StringFormat { Alignment = StringAlignment.Center };
+
+                using (var font = new Font(fontFamily, 36, FontStyle.Regular))
+                {
+                    graphics.DrawString(textToWrite, font, Brushes.Red, writeLocation, format);
+                }
+                image.Save(savePath, ImageFormat.Jpeg);
+            }
+        }
+
+        public Bitmap LoadImage(string imagePath)
+        {
+            Bitmap image = new Bitmap(imagePath);
+            return image;
+        }
+
+        public FontFamily LoadFont(string fontPath, string fontName)
+        {
+            PrivateFontCollection fonts = new PrivateFontCollection();
+            fonts.AddFontFile(fontPath);
+            FontFamily font = fonts.Families[0];
+            return font;
+        }
+    }
+
     public class ImageGeneratorHelper
     {
         public string ConvertTextToImage(string text, string fontname, int fontsize, FontStyle fontStyle, Color bgcolor, Color fcolor, int Width, int Height)
@@ -17,7 +52,7 @@ namespace POC_GeracaoImagens
             Font font = new Font(fontname, fontsize, fontStyle);
 
             //first, create a dummy bitmap just to get a graphics object
-            Image img = new Bitmap(1, 1);
+            Bitmap img = new Bitmap(1, 1);
             Graphics drawing = Graphics.FromImage(img);
             //measure the string to see how big the image needs to be
             SizeF textSize = drawing.MeasureString(text, font, Width);
@@ -35,13 +70,14 @@ namespace POC_GeracaoImagens
 
             //create a new image of the right size
             img = new Bitmap(Width, Height);
+            //img.SetResolution(100, 100);
 
             drawing = Graphics.FromImage(img);
             //Adjust for high quality
             drawing.CompositingQuality = CompositingQuality.HighQuality;
-            drawing.InterpolationMode = InterpolationMode.HighQualityBilinear;
+            drawing.InterpolationMode = InterpolationMode.HighQualityBicubic;
             drawing.PixelOffsetMode = PixelOffsetMode.HighQuality;
-            drawing.SmoothingMode = SmoothingMode.HighQuality;
+            drawing.SmoothingMode = SmoothingMode.AntiAlias;
             drawing.TextRenderingHint = TextRenderingHint.AntiAliasGridFit;
 
             //paint the background
